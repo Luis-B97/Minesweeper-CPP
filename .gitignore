@@ -1,0 +1,59 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.sln.docstates
+*.sdf
+*.opensdf
+*.vcxproj.filters
+*.vcxproj.user
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# C++ objects and libs
+*.o
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
+*.exe
+*.out
+*.app
+
+# Compiled Dynamic libraries
+*.so.*
+*.dylib
+
+# Qt-es
+object_script.*.Release
+object_script.*.Debug
+*_plugin_import.cpp
+/.qmake.cache
+/.qmake.stash
+*.pro.user
+*.pro.user.*
+
+# C++ Precompiled Headers
+*.gch
+*.pch
+
+# Visual Studio Code
+.vscode/
+.history/
+
+# JetBrains IDEs
+.idea/
+*.iml
+
+# OS generated files
+.DS_Store
+Thumbs.db
