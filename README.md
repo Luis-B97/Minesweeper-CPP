@@ -13,10 +13,11 @@ A classic Minesweeper game built with C++ and SFML (Simple and Fast Multimedia L
 - **Win/Loss Detection**: Automatic game state detection
 - **Clean Graphics**: Professional-looking interface with clear visual feedback
 - **Recursive Reveal**: Automatically reveals adjacent safe cells
+- **Configurable Settings**: Game settings loaded from `config.cfg`
 
 ## Screenshots
 
-*Game interface showing the Minesweeper grid and controls*
+*Classic Minesweeper gameplay with SFML graphics*
 
 ## Installation
 
@@ -46,9 +47,9 @@ cd Minesweeper-CPP
 vcpkg install sfml
 ```
 
-#### 3. Configure Visual Studio Project
+#### 3. Open in Visual Studio
 
-1. Open the `.sln` file in Visual Studio
+1. Open `Project3_Minesweeper.sln` in Visual Studio
 2. Right-click project → Properties
 3. **C/C++ → General → Additional Include Directories**: Add SFML include path
    - Example: `C:\SFML\include`
@@ -86,7 +87,6 @@ Copy SFML DLLs from `SFML\bin` to your project's output directory:
 |-------|--------|
 | **Left Click** | Reveal cell |
 | **Right Click** | Place/remove flag |
-| **Debug Mode** | Show all mine locations |
 
 ### Game Tips
 
@@ -99,61 +99,92 @@ Copy SFML DLLs from `SFML\bin` to your project's output directory:
 
 ```
 Minesweeper-CPP/
-├── Source Files/
-│   ├── main.cpp              # Entry point and game loop
-│   ├── Board.cpp             # Game board logic
-│   ├── Cell.cpp              # Individual cell behavior
-│   └── Game.cpp              # Game state management
-├── Header Files/
-│   ├── Board.h               # Board class definition
-│   ├── Cell.h                # Cell class definition
-│   └── Game.h                # Game class definition
-├── Assets/
-│   ├── textures/             # Sprite images
-│   └── fonts/                # Text fonts
-└── README.md                 # This file
+├── SFML_Demo/                    # Main project folder
+│   ├── Project3_Minesweeper.cpp  # Main game logic and entry point
+│   ├── Controller.h              # Game controller class
+│   └── Tile.h                    # Tile/Cell class definition
+├── images/                       # Game sprite assets
+│   ├── debug.png
+│   ├── digits.png
+│   ├── face_happy.png
+│   ├── face_lose.png
+│   ├── face_win.png
+│   ├── flag.png
+│   ├── mine.png
+│   ├── number_*.png             # Number sprites (1-8)
+│   ├── tile_hidden.png
+│   └── tile_revealed.png
+├── config.cfg                    # Game configuration file
+├── Project3_Minesweeper.sln     # Visual Studio solution file
+├── .gitignore                   # Git ignore file
+└── README.md                    # This file
 ```
+
+## Configuration
+
+Game settings are loaded from `config.cfg`:
+
+```
+# Example config.cfg format
+width=25        # Board width (columns)
+height=16       # Board height (rows)
+mines=50        # Number of mines
+```
+
+Modify these values to adjust game difficulty.
 
 ## Technical Details
 
 ### Architecture
 
-- **Object-Oriented Design**: Utilizes classes for Board, Cell, and Game management
-- **Event-Driven**: SFML event handling for user interactions
+- **Object-Oriented Design**: 
+  - **Controller Class**: Manages game state, board generation, and game logic
+  - **Tile Class**: Represents individual cells with state (revealed, flagged, mine)
+- **Event-Driven**: SFML event handling for mouse clicks
 - **Recursive Algorithm**: For revealing adjacent safe cells
 - **Grid System**: 2D array-based board representation
 
-### Key Algorithms
+### Key Components
 
-**Mine Generation**
-- Random placement with configurable mine count
-- Ensures valid board states
+**Controller (`Controller.h`)**
+- Game initialization and board setup
+- Mine placement algorithm
+- Win/loss detection
+- User input handling
+- Rendering game state
 
-**Recursive Reveal**
-- Flood-fill algorithm for revealing connected safe cells
-- Stops at numbered cells
+**Tile (`Tile.h`)**
+- Individual cell properties
+- State management (hidden, revealed, flagged)
+- Mine status
+- Adjacent mine count
 
-**Win Detection**
-- Tracks revealed cells vs. total safe cells
-- Updates game state accordingly
+**Main Game Loop (`Project3_Minesweeper.cpp`)**
+- SFML window creation
+- Event polling
+- Game state updates
+- Rendering sprites
 
 ### SFML Components Used
 
-- **Graphics Module**: Rendering sprites and text
-- **Window Module**: Creating and managing the game window
-- **System Module**: Timing and vector utilities
+- **Graphics Module**: Rendering sprites, textures, and text
+- **Window Module**: Creating and managing the 800x576 game window
+- **System Module**: Vector utilities for positioning
 
-## Configuration
+## Key Algorithms
 
-You can modify game settings in the source code:
+**Mine Generation**
+- Random placement with configurable mine count
+- Ensures even distribution across the board
 
-```cpp
-// Example configuration options
-const int BOARD_WIDTH = 10;   // Number of columns
-const int BOARD_HEIGHT = 10;  // Number of rows
-const int MINE_COUNT = 15;    // Number of mines
-const int CELL_SIZE = 32;     // Pixel size of each cell
-```
+**Recursive Reveal**
+- Flood-fill algorithm for revealing connected safe cells
+- Automatically reveals cells with no adjacent mines
+- Stops at numbered cells
+
+**Win Detection**
+- Tracks revealed safe cells
+- Victory when all non-mine cells are revealed
 
 ## Development
 
@@ -166,22 +197,24 @@ const int CELL_SIZE = 32;     // Pixel size of each cell
 
 ### What I Learned
 
-- Game development with SFML
-- Event-driven programming
-- Recursive algorithms (flood-fill)
-- Object-oriented design patterns
-- Working with 2D arrays and grid systems
-- Graphics rendering and sprite management
+- Game development with SFML graphics library
+- Event-driven programming and user input handling
+- Recursive algorithms (flood-fill for cell revealing)
+- Object-oriented design with C++ classes
+- Working with 2D arrays and grid-based systems
+- Sprite rendering and texture management
+- File I/O for configuration loading
 - Resource management in C++
 
 ## Future Enhancements
 
-- [ ] Multiple difficulty levels (Easy, Medium, Hard)
-- [ ] Custom board sizes
-- [ ] Timer and scoring system
-- [ ] Leaderboard/high scores
-- [ ] Sound effects and music
-- [ ] First-click safety (never hit mine on first click)
+- [ ] Multiple difficulty presets (Easy, Medium, Hard)
+- [ ] In-game timer
+- [ ] Move counter
+- [ ] High score system
+- [ ] Sound effects
+- [ ] Animations for revealing cells
+- [ ] First-click safety guarantee
 - [ ] Hint system
 - [ ] Save/load game state
 
@@ -190,17 +223,22 @@ const int CELL_SIZE = 32;     // Pixel size of each cell
 ### Common Issues
 
 **SFML DLLs Not Found**
-- Ensure SFML DLLs are in the same directory as the executable
-- Or add SFML\bin to your system PATH
+- Ensure SFML DLLs are in the same directory as the `.exe`
+- Or add `SFML\bin` to your system PATH
 
 **Linker Errors**
 - Verify SFML library paths in project properties
-- Check that you're using the correct SFML version for your compiler
-- Ensure Debug/Release configurations match SFML library types
+- Ensure you're using matching SFML version for your compiler
+- Check Debug/Release configurations match library types
 
-**Graphics Not Displaying**
-- Check that texture/image files are in the correct path
-- Verify working directory is set to project directory
+**Images Not Loading**
+- Verify `images/` folder is in the working directory
+- Check that all sprite files exist
+- Ensure working directory is set correctly in project settings
+
+**Config File Not Found**
+- Make sure `config.cfg` is in the same directory as the executable
+- Check file format matches expected format
 
 ## Contributing
 
@@ -214,7 +252,7 @@ This project was created for educational purposes.
 
 - SFML Documentation and Community
 - Classic Minesweeper by Microsoft
-- University coursework inspiration
+- University programming coursework
 
 ## Contact
 
@@ -222,4 +260,4 @@ Luis B - [GitHub](https://github.com/Luis-B97)
 
 ---
 
-**Note**: This project demonstrates C++ programming skills, game development concepts, and working with external libraries like SFML.
+**Note**: This project demonstrates C++ programming skills, game development concepts, object-oriented design, and working with external graphics libraries like SFML.
